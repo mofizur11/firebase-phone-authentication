@@ -2,8 +2,12 @@ package com.ideasoft.firebasephoneauthontication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,6 +53,10 @@ public class OtpVerifyActivity extends AppCompatActivity {
         progressBarVerify = findViewById(R.id.progressBarVerify);
 
         editTextInput();
+
+        requestPermissions();
+
+        new OTPReceiver().setEditText_otp(etC1);
 
         tvMobile.setText(String.format(
                 "+880-%s", getIntent().getStringExtra("phone")
@@ -192,5 +200,16 @@ public class OtpVerifyActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(OtpVerifyActivity.this, Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(OtpVerifyActivity.this, new String[]{
+                    Manifest.permission.RECEIVE_SMS
+            }, 100);
+
+        }
     }
 }
